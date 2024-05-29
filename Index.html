@@ -1,134 +1,172 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Global Potato Dishes Map</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
     <style>
-        body, html { height: 100%; margin: 0; font-family: 'Indie Flower', cursive; }
-        #map { position: absolute; top: 38px; bottom: 0; width: 100%; } 
-        .mapboxgl-popup-content {
-            font-size: 16px;
-            line-height: 20px;
-            color: #333;
-            text-align: center;
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: "Indie Flower", cursive;
+      }
+      #map {
+        position: absolute;
+        top: 38px;
+        bottom: 0;
+        width: 100%;
+      }
+      .mapboxgl-popup-content {
+        font-size: 16px;
+        line-height: 20px;
+        color: #333;
+        text-align: center;
+      }
+      .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+      .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+        border-color: #795548 transparent;
+      }
+      .mapboxgl-popup-content {
+        background-color: #fff3e0;
+        border-color: #795548;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      h3 {
+        color: #bf360c;
+        margin: 0 0 10px;
+      }
+      #title {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        text-align: center;
+        font-size: 24px;
+        color: #bf360c;
+        background-color: #fff3e0;
+        animation: moveTitle 10s infinite alternate linear;
+      }
+      @keyframes moveTitle {
+        0% {
+          left: 0;
         }
-        .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
-        .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-            border-color: #795548 transparent;
+        100% {
+          left: calc(100% - 100%);
         }
-        .mapboxgl-popup-content {
-            background-color: #fff3e0;
-            border-color: #795548;
-            border-radius: 8px;
-            padding: 10px;
-        }
-        h3 {
-            color: #bf360c;
-            margin: 0 0 10px;
-        }
-        #title {
-            position: absolute;
-            width: 100%;
-            top: 0;
-            text-align: center;
-            font-size: 24px;
-            color: #bf360c;
-            background-color: #fff3e0;
-            animation: moveTitle 10s infinite alternate linear;
-        }
-        @keyframes moveTitle {
-            0% { left: 0; }
-            100% { left: calc(100% - 100%); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="title">
-        <a href="https://belgapom.be/nl/" target="_blank">
-        <img src="Logo.png.png" alt="Potato Logo" style="width: 120px; height: 40px; margin-right: 0px; float: left;"></a>
-        Explore Potato Dishes Around the World
+      <a href="https://belgapom.be/nl/" target="_blank">
+        <img
+          src="Logo.png.png"
+          alt="Potato Logo"
+          style="width: 120px; height: 40px; margin-right: 0px; float: left"
+      /></a>
+      Explore Potato Dishes Around the World
     </div>
 
     <div id="map"></div>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1Ijoib2JhZ2dvIiwiYSI6ImNscnV1dzZyeTAxYm0yaW8yeWtzM2VtejgifQ.lrrKCPKUjiKL1c6UjbF6_A';
-    
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [4.4699, 50.5039],  
-            zoom: 5,
-            pitchWithRotate: false
-        });
-    
-        map.dragRotate.disable();
-        map.touchZoomRotate.disableRotation();
-    
-        function addMarker(country, description, link, lng, lat) {
-            const imageUrl = `Recipe_Images/Recipe Images/${country}.jpg`;
-    
-            const popup = new mapboxgl.Popup({
-                offset: 15,
-                closeButton: false,
-                closeOnClick: false
-            }).setHTML(
-                `<h3>${country}</h3>
+      mapboxgl.accessToken =
+        "pk.eyJ1Ijoib2JhZ2dvIiwiYSI6ImNscnV1dzZyeTAxYm0yaW8yeWtzM2VtejgifQ.lrrKCPKUjiKL1c6UjbF6_A";
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/light-v10",
+        center: [4.4699, 50.5039],
+        zoom: 5,
+        pitchWithRotate: false,
+      });
+
+      map.dragRotate.disable();
+      map.touchZoomRotate.disableRotation();
+
+      function addMarker(country, description, link, lng, lat) {
+        const imageUrl = `Recipe_Images/Recipe Images/${country}.jpg`;
+
+        const popup = new mapboxgl.Popup({
+          offset: 15,
+          closeButton: false,
+          closeOnClick: false,
+        }).setHTML(
+          `<h3>${country}</h3>
                  <img src="${imageUrl}" alt="${country}" style="width:150px; height:150px; object-fit: cover;">
                  <p>${description}</p>
                  <p style="color: #555; font-style: italic;">Click to try the recipe</p>`
-            );
-    
-            const el = document.createElement('div');
-            el.className = 'marker';
-            el.style.backgroundImage = `url('${imageUrl}')`;
-            el.style.width = '30px';
-            el.style.height = '30px';
-            el.style.backgroundSize = 'cover';
-            el.style.borderRadius = '50%';
-    
-            el.addEventListener('mouseenter', () => {
-                popup.addTo(map);
-            });
-    
-            el.addEventListener('mouseleave', () => {
-                popup.remove();
-            });
-    
-            el.addEventListener('click', () => {
-                window.open(link, '_blank');
-            });
-    
-            const marker = new mapboxgl.Marker(el)
-                .setLngLat([lng, lat])
-                .setPopup(popup)
-                .addTo(map);
-        }
-    
-        fetch('Signature Potato Dishes by Country.csv')
-            .then(response => response.text())
-            .then(csv => {
-                const lines = csv.split('\n');
-                lines.forEach((line, index) => {
-                    if (index > 0 && line) {
-                        const columns = line.split(',');
-                        const country = columns[0];
-                        const description = columns[1];
-                        const link = columns[2];
-                        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(country)}.json?access_token=${mapboxgl.accessToken}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const place = data.features[0];
-                                if (place) {
-                                    addMarker(country, description, link, place.center[0], place.center[1]);
-                                }
-                            });
-                    }
+        );
+
+        const el = document.createElement("div");
+        el.className = "marker";
+        el.style.backgroundImage = `url('${imageUrl}')`;
+        el.style.width = "30px";
+        el.style.height = "30px";
+        el.style.backgroundSize = "cover";
+        el.style.borderRadius = "50%";
+
+        el.addEventListener("mouseenter", () => {
+          popup.addTo(map);
+        });
+
+        el.addEventListener("mouseleave", () => {
+          popup.remove();
+        });
+
+        el.addEventListener("click", () => {
+          window.open(link, "_blank");
+        });
+
+        const marker = new mapboxgl.Marker(el)
+          .setLngLat([lng, lat])
+          .setPopup(popup)
+          .addTo(map);
+      }
+
+      fetch("dishes.csv")
+        .then((response) => response.text())
+        .then((csv) => {
+          const lines = csv.split("\n");
+          lines.forEach((line, index) => {
+            if (index > 0 && line) {
+              const columns = line.split(",");
+              const country = columns[0];
+              const description = columns[1];
+              const link = columns[2];
+              fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+                  country
+                )}.json?access_token=${mapboxgl.accessToken}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  const place = data.features[0];
+                  if (place) {
+                    addMarker(
+                      country,
+                      description,
+                      link,
+                      place.center[0],
+                      place.center[1]
+                    );
+                  }
                 });
-            });
+            }
+          });
+        });
     </script>
-</body>
+  </body>
 </html>
